@@ -1,46 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ConsoleParking;
 
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Cars")]
     public class CarsController : Controller
     {
-        // GET: api/Cars
+        // GET : api/Cars/GetCars
         [HttpGet]
-        public IEnumerable<string> Get()
+        public JsonResult GetCars()
         {
-            return new string[] { "value1", "value2" };
+            return Json(Parking.Instance.Cars.ToList<Car>());
         }
 
-        // GET: api/Cars/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        // GET : api/Cars/GetCar/{number}
+        [HttpGet]
+        public JsonResult GetCar(string number)
         {
-            return "value";
+            Car car = Parking.Instance.Cars.Find((c)=> { return c.CarNumber == number; });
+            if (car == null)
+                 HttpContext.Response.StatusCode = 404;
+            return Json(car);
         }
-        
-        // POST: api/Cars
+
+        // POST : api/Cars/AddCar
         [HttpPost]
-        public void Post([FromBody]string value)
+        public JsonResult AddCar([FromBody]Car car)
         {
+            try
+            {
+                car.AddToParking(Parking.Instance);
+                HttpContext.Response.StatusCode = 201;  //Добавлено 
+            }
+            catch (System.Exception ex)
+            {
+                HttpContext.Response.StatusCode = 406; //Неприемлимо
+                return Json(ex.Message);
+            }
+            return Json(car);
         }
-        
-        // PUT: api/Cars/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+
+        // DELETE : api/Cars/DeleteCar/{number}
+        [HttpDelete]
+        public void DeleteCar(string number)
         {
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            Car car = Parking.Instance.Cars.Find((c) => { return c.CarNumber == number; });
+            if(car==null)
+            {
+                HttpContext.Response.StatusCode = 404;
+                return;
+            }
+            try
+            {
+                car.RemoveFromParking(Parking.Instance);
+            }
+            catch (System.Exception)
+            {
+                HttpContext.Response.StatusCode = 402;  //Необходима оплата
+                return;
+            }
+            HttpContext.Response.StatusCode = 200;
         }
     }
 }
