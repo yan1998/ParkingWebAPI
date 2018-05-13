@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using ConsoleParking;
 
 namespace ParkingWebAPI
 {
@@ -14,6 +15,8 @@ namespace ParkingWebAPI
     {
         public static void Main(string[] args)
         {
+            if(File.Exists(Parking.Instance.Settings.LogPath))
+                File.Delete(Parking.Instance.Settings.LogPath);
             BuildWebHost(args).Run();
         }
 
