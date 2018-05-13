@@ -34,7 +34,10 @@ namespace ParkingWebAPI
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "api/{controller}/{action}/{number?}");
+            });
         }
     }
 }
