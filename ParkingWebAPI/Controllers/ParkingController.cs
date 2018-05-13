@@ -1,46 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using ConsoleParking;
 
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Parking")]
     public class ParkingController : Controller
     {
-        // GET: api/Parking
+        // GET : api/Parking/FreePlaces
         [HttpGet]
-        public IEnumerable<string> Get()
+        public JsonResult FreePlaces()
         {
-            return new string[] { "value1", "value2" };
+            var free = new { freePlaces = Parking.Instance.CountFreePlaces };
+            return Json(free);
         }
 
-        // GET: api/Parking/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        // GET : api/Parking/OccupiedPlaces
+        [HttpGet]
+        public JsonResult OccupiedPlaces()
         {
-            return "value";
+            var occupiedPlaces = new { occupiedPlaces = Parking.Instance.Cars.Count };
+            return Json(occupiedPlaces);
         }
-        
-        // POST: api/Parking
-        [HttpPost]
-        public void Post([FromBody]string value)
+
+        // GET : api/Parking/Balance
+        [HttpGet]
+        public JsonResult Balance()
         {
-        }
-        
-        // PUT: api/Parking/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var balance = new { balance = Parking.Instance.Balance };
+            return Json(balance);
         }
     }
 }
