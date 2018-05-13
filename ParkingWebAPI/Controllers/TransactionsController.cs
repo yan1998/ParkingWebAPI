@@ -11,6 +11,11 @@ namespace ParkingWebAPI.Controllers
     [Produces("application/json")]
     public class TransactionsController : Controller
     {
+        public class AddCoins
+        {
+            public double Value{ get; set; }
+        }
+
         // GET : api/Transactions/GetTransactionLog/
         [HttpGet]
         public JsonResult GetTransactionLog()
@@ -39,7 +44,7 @@ namespace ParkingWebAPI.Controllers
 
         // PUT: api/Transactions/AddCarBalance/{number}
         [HttpPut]
-        public JsonResult AddCarBalance(string number, [FromBody]double value)
+        public JsonResult AddCarBalance(string number, [FromBody]AddCoins coins)
         {
             Car car = Parking.Instance.Cars.Find((c) => { return c.CarNumber == number; });
             if (car == null)
@@ -47,7 +52,7 @@ namespace ParkingWebAPI.Controllers
                 HttpContext.Response.StatusCode = 404;
                 return null;
             }
-            car.Balance += value;
+            car.Balance += coins.Value;
             var newBalance = new{ newBalance=car.Balance};
             return Json(newBalance);
         }
