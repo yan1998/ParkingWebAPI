@@ -4,43 +4,53 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ConsoleParking;
 
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Transactions")]
     public class TransactionsController : Controller
     {
-        // GET: api/Transactions
+        // GET : api/Transactions/GetTransactionLog/
         [HttpGet]
-        public IEnumerable<string> Get()
+        public JsonResult GetTransactionLog()
         {
-            return new string[] { "value1", "value2" };
+            List<Parking.TransactionLog> log=Parking.Instance.GetContainLogFile();
+            return Json(log);
         }
 
-        // GET: api/Transactions/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        // GET : api/Transactions/GetTransactions/
+        [HttpGet]
+        public JsonResult GetTransactions()
         {
-            return "value";
+            List<Transaction> transactions = Parking.Instance.Transactions.Where(tr =>{ return tr.DateTime.AddMinutes(1) >= DateTime.Now;}).ToList<Transaction>();
+            return Json(transactions);
         }
-        
-        // POST: api/Transactions
-        [HttpPost]
-        public void Post([FromBody]string value)
+
+        // GET : api/Transactions/GetCarTransactions/{number}
+        [HttpGet]
+        public JsonResult GetCarTransactions(string number)
         {
+            List<Transaction> transactions = Parking.Instance.Transactions.Where(tr => { return tr.DateTime.AddMinutes(1) >= DateTime.Now && tr.CarNumber==number; }).ToList<Transaction>();
+            if (transactions.Count == 0)
+                HttpContext.Response.StatusCode = 404;
+            return Json(transactions);
         }
-        
-        // PUT: api/Transactions/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+
+        // PUT: api/Transactions/AddCarBalance/{number}
+        [HttpPut]
+        public JsonResult AddCarBalance(string number, [FromBody]double value)
         {
+            Car car = Parking.Instance.Cars.Find((c) => { return c.CarNumber == number; });
+            if (car == null)
+            {
+                HttpContext.Response.StatusCode = 404;
+                return null;
+            }
+            car.Balance += value;
+            var newBalance = new{ newBalance=car.Balance};
+            return Json(newBalance);
         }
-        
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
     }
 }
