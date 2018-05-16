@@ -61,7 +61,7 @@ namespace ParkingWebAPI.Controllers
                 HttpContext.Response.StatusCode = 402;  //Необходима оплата
                 return;
             }
-            HttpContext.Response.StatusCode = 200;
+            HttpContext.Response.StatusCode = 204;
         }
     }
 }
