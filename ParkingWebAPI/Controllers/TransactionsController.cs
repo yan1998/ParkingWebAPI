@@ -9,28 +9,29 @@ using ConsoleParking;
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class TransactionsController : Controller
     {
 
-        // GET : api/Transactions/GetTransactionLog/
+        // GET : api/transactions/TransactionLog/
         [HttpGet]
-        public JsonResult GetTransactionLog()
+        public JsonResult TransactionLog()
         {
             List<Parking.TransactionLog> log=Parking.Instance.GetContainLogFile();
             return Json(log);
         }
 
-        // GET : api/Transactions/GetTransactions/
+        // GET : api/transactions/Transactions/
         [HttpGet]
-        public JsonResult GetTransactions()
+        public JsonResult Transactions()
         {
             List<Transaction> transactions = Parking.Instance.Transactions.Where(tr =>{ return tr.DateTime.AddMinutes(1) >= DateTime.Now;}).ToList<Transaction>();
             return Json(transactions);
         }
 
-        // GET : api/Transactions/GetCarTransactions/{number}
-        [HttpGet]
-        public JsonResult GetCarTransactions(string number)
+        // GET : api/transactions/CarTransactions/{number}
+        [HttpGet("{number}")]
+        public JsonResult CarTransactions(string number)
         {
             List<Transaction> transactions = Parking.Instance.Transactions.Where(tr => { return tr.DateTime.AddMinutes(1) >= DateTime.Now && tr.CarNumber==number; }).ToList<Transaction>();
             if (transactions.Count == 0)
@@ -38,8 +39,8 @@ namespace ParkingWebAPI.Controllers
             return Json(transactions);
         }
 
-        // PUT: api/Transactions/AddCarBalance/{number}
-        [HttpPut]
+        // PUT: api/transactions/AddCarBalance/{number}
+        [HttpPut("{number}")]
         public JsonResult AddCarBalance(string number, [FromBody]AddCoins coins)
         {
             Car car = Parking.Instance.Cars.Find((c) => { return c.CarNumber == number; });

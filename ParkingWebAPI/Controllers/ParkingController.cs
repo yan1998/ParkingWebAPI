@@ -4,9 +4,10 @@ using ConsoleParking;
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class ParkingController : Controller
     {
-        // GET : api/Parking/FreePlaces
+        // GET : api/parking/FreePlaces
         [HttpGet]
         public JsonResult FreePlaces()
         {
@@ -14,7 +15,7 @@ namespace ParkingWebAPI.Controllers
             return Json(free);
         }
 
-        // GET : api/Parking/OccupiedPlaces
+        // GET : api/parking/OccupiedPlaces
         [HttpGet]
         public JsonResult OccupiedPlaces()
         {
@@ -22,7 +23,7 @@ namespace ParkingWebAPI.Controllers
             return Json(occupiedPlaces);
         }
 
-        // GET : api/Parking/Balance
+        // GET : api/parking/Balance
         [HttpGet]
         public JsonResult Balance()
         {
