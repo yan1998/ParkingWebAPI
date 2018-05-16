@@ -5,19 +5,19 @@ Solution constist of 2 projects:
   
 ## REST API:
   * Cars:
-      * GetCars - GET: api/Cars/GetCars
-      * GetCar - GET: api/Cars/GetCar/{number}
-      * AddCar -  GET: api/Cars/AddCar
-      * DeleteCar - DELETE : api/Cars/DeleteCar/{number}
+      * GetCars - GET: api/cars
+      * GetCar - GET: api/cars/number
+      * AddCar -  GET: api/cars
+      * DeleteCar - DELETE : api/cars/{number}
    * Parking:
-      * FreePlaces - GET : api/Parking/FreePlaces
-      * OccupiedPlaces - GET : api/Parking/OccupiedPlaces
-      * Balance -  GET : api/Parking/Balance
+      * FreePlaces - GET : api/parking/FreePlaces
+      * OccupiedPlaces - GET : api/parking/OccupiedPlaces
+      * Balance -  GET : api/parking/Balance
    * Transactions:
-      * GetTransactionLog - GET : api/Transactions/GetTransactionLog/
-      * GetTransactions - GET : api/Transactions/GetTransactions/
-      * GetCarTransactions - GET : api/Transactions/GetCarTransactions/{number}
-      * AddCarBalance - PUT: api/Transactions/AddCarBalance/{number}
+      * GetTransactionLog - GET : api/transactions/TransactionLog/
+      * GetTransactions - GET : api/transactions/Transactions/
+      * GetCarTransactions - GET : api/transactions/CarTransactions/{number}
+      * AddCarBalance - PUT: api/transactions/AddCarBalance/{number}
       
 ## POST and GET body:
 ### body POST for AddCar

@@ -6,17 +6,18 @@ using ConsoleParking;
 namespace ParkingWebAPI.Controllers
 {
     [Produces("application/json")]
+    [Route("api/[controller]")]
     public class CarsController : Controller
     {
-        // GET : api/Cars/GetCars
+        // GET : api/cars
         [HttpGet]
         public JsonResult GetCars()
         {
             return Json(Parking.Instance.Cars.ToList<Car>());
         }
 
-        // GET : api/Cars/GetCar/{number}
-        [HttpGet]
+        // GET : api/cars/number
+        [HttpGet("{number}")]
         public JsonResult GetCar(string number)
         {
             Car car = Parking.Instance.Cars.Find((c)=> { return c.CarNumber == number; });
@@ -25,7 +26,7 @@ namespace ParkingWebAPI.Controllers
             return Json(car);
         }
 
-        // POST : api/Cars/AddCar
+        // POST : api/cars
         [HttpPost]
         public JsonResult AddCar([FromBody]Car car)
         {
@@ -42,8 +43,8 @@ namespace ParkingWebAPI.Controllers
             return Json(car);
         }
 
-        // DELETE : api/Cars/DeleteCar/{number}
-        [HttpDelete]
+        // DELETE : api/cars/{number}
+        [HttpDelete("{number}")]
         public void DeleteCar(string number)
         {
             Car car = Parking.Instance.Cars.Find((c) => { return c.CarNumber == number; });
@@ -61,7 +62,7 @@ namespace ParkingWebAPI.Controllers
                 HttpContext.Response.StatusCode = 402;  //Необходима оплата
                 return;
             }
-            HttpContext.Response.StatusCode = 200;
+            HttpContext.Response.StatusCode = 204;
         }
     }
 }
