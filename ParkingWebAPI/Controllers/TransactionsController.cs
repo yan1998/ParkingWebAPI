@@ -11,10 +11,6 @@ namespace ParkingWebAPI.Controllers
     [Produces("application/json")]
     public class TransactionsController : Controller
     {
-        public class AddCoins
-        {
-            public double Value{ get; set; }
-        }
 
         // GET : api/Transactions/GetTransactionLog/
         [HttpGet]
